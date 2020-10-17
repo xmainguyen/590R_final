@@ -176,13 +176,14 @@ ui <- fluidPage(
                            sidebarLayout (
                              
                              sidebarPanel(
-                               selectInput('var', 'Choose Variable', names(holdout),
-                                           selected = names(holdout)[[3]])
+                               selectInput('var', 'Choose Variable', names(d),
+                                           selected = names(d)[[3]])
                              ),
                              
-                             mainPanel(h2("Summary Statistics of the variable"),
+                             mainPanel(h2("Relationship of Each variable And Shares"),
                                        plotOutput("explore_plot"),
                                        br(),
+                                       helpText("Summary Statistics"),
                                        verbatimTextOutput("explore_stat"))
                            )),
                   
@@ -262,11 +263,13 @@ ui <- fluidPage(
 
 server <- function(input,output) {
   output$explore_plot <- renderPlot ({
-    plot(holdout[,input$var], ylab= names(holdout[,input$var]))
+    plot(x=d$y, y=d[,input$var], 
+         ylab = as.character(input$var),
+         xlab = "Numbers of Shares")
   })
   
   output$explore_stat <- renderPrint ({
-    summary(holdout[,input$var])
+    summary(d[,input$var])
   })
   
   ############################## Prediction Tab ################################
