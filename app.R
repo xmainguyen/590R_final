@@ -25,6 +25,8 @@
 ############################ Load Libraries ####################################
 library(dplyr)
 library(shiny)
+library(caret)
+library(h2o)
 library(shinydashboard)
 library(shinythemes)
 library(rsconnect)
@@ -164,7 +166,7 @@ varimp_nb <- h2o.varimp_plot(rf, num_of_features =NULL)
 ############################### Build Shiny app ################################
 
 ui <- fluidPage(
-  theme = shinytheme("superhero"),
+  theme = shinytheme("united"),
   titlePanel("News Popularity Prediction"),
   
   br(), 
@@ -185,6 +187,8 @@ ui <- fluidPage(
                            )),
                   
               tabPanel("Prediction", 
+                       h2("Please Choose Different Values To Predict"),
+                       br(),
                            fluidRow(
                              
                              column(3,
@@ -245,7 +249,7 @@ ui <- fluidPage(
                   ),
               
               tabPanel("Model Statistics",
-                         mainPanel(h2("Summary Statistics of Predictive Model"),
+                         mainPanel(h2("Summary Statistics of The Predictive Model"),
                                    plotOutput('impVarplot'),
                                    
                                    br(),
@@ -258,9 +262,7 @@ ui <- fluidPage(
 
 server <- function(input,output) {
   output$explore_plot <- renderPlot ({
-    # x<-summary(holdout[,input$var])
-    # boxplot(x,col="sky blue",border="purple",main=names(holdout[input$var]))
-    plot(holdout[,input$var])
+    plot(holdout[,input$var], ylab= names(holdout[,input$var]))
   })
   
   output$explore_stat <- renderPrint ({
