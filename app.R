@@ -126,8 +126,8 @@ d <- d[, c(TRUE,!nzv$nzv[2:ncol(d)])]
 
 ####################### Standardize Using Min-max ##############################
 
-preProcValues <- preProcess(d[,2:ncol(d)], method = c("range"))
-preProcValues_te <- preProcess(holdout[,2:ncol(holdout)], method = c("range"))
+preProcValues <- preProcess(d[,2:ncol(d)], method = c("YeoJohnson"))
+preProcValues_te <- preProcess(holdout[,2:ncol(holdout)], method = c("YeoJohnson"))
 
 d <- predict(preProcValues, d)
 holdout <- predict(preProcValues_te, holdout)
@@ -263,9 +263,9 @@ ui <- fluidPage(
 
 server <- function(input,output) {
   output$explore_plot <- renderPlot ({
-    plot(x=d$y, y=d[,input$var], 
-         ylab = as.character(input$var),
-         xlab = "Numbers of Shares")
+    plot(y=d$y, x=d[,input$var], 
+         xlab = as.character(input$var),
+         ylab = "Numbers of Shares")
   })
   
   output$explore_stat <- renderPrint ({
